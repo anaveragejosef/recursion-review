@@ -15,15 +15,15 @@ var stringifyJSON = function(obj) {
       return `${obj}`;
     }
   } else if (Array.isArray(obj)){ //check if array
-      var results = [];
+      var result = [];
       for (const ele of obj){
         result.push(stringifyJSON(ele));
       }
-      return "[" + results.join(",") + "]";
+      return "[" + result.join(",") + "]";
   } else {
-    // if (typeof obj === null) {
-    //   return 'null';
-    // }
+    if (obj === null) {
+     return 'null';
+    }
     // var strObj = "{";
     // Object.keys(obj).forEach(function(key){
     //   strObj += stringifyJSON(key) + ':' + stringifyJSON(obj[key]);
@@ -34,18 +34,18 @@ var stringifyJSON = function(obj) {
     // strObj += "}";
     // return strObj;
     var objStringify = [];
-    Object.key(obj).forEach(function(key){
+    for (var key in obj) {
       var value = obj[key];
       if (typeof value === "function" || value === undefined){
         continue;
-      } else if (typeof value === 'boolean' || typeof value === 'number' || value === null){
+      } else if (typeof value === 'boolean' || typeof value === 'number'){
         objStringify.push(`"${key}":${value}`)
       } else if (typeof value === 'string'){
         objStringify.push(`"${key}":"${value}"`)
       } else if (typeof value === 'object'){
         objStringify.push(`"${key}":${stringifyJSON(value)}`);
       }
-    });
+    };
 
     return `{${objStringify}}`
   }
