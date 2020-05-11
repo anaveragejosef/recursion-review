@@ -14,8 +14,41 @@ var stringifyJSON = function(obj) {
     } else {
       return `${obj}`;
     }
-  }
+  } else if (Array.isArray(obj)){ //check if array
+      var results = [];
+      for (const ele of obj){
+        result.push(stringifyJSON(ele));
+      }
+      return "[" + results.join(",") + "]";
+  } else {
+    // if (typeof obj === null) {
+    //   return 'null';
+    // }
+    // var strObj = "{";
+    // Object.keys(obj).forEach(function(key){
+    //   strObj += stringifyJSON(key) + ':' + stringifyJSON(obj[key]);
+    //   if (key !== Object.keys(obj).length-1) {
+    //     strObj += ",";
+    //   }
+    // });
+    // strObj += "}";
+    // return strObj;
+    var objStringify = [];
+    Object.key(obj).forEach(function(key){
+      var value = obj[key];
+      if (typeof value === "function" || value === undefined){
+        continue;
+      } else if (typeof value === 'boolean' || typeof value === 'number' || value === null){
+        objStringify.push(`"${key}":${value}`)
+      } else if (typeof value === 'string'){
+        objStringify.push(`"${key}":"${value}"`)
+      } else if (typeof value === 'object'){
+        objStringify.push(`"${key}":${stringifyJSON(value)}`);
+      }
+    });
 
+    return `{${objStringify}}`
+  }
 
 };
 
